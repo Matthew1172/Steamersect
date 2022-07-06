@@ -1,7 +1,7 @@
 import math
 import requests
 
-my_key = "A0461606E0ADBAB054DF875B8D61120A"
+my_key = "check env variables"
 my_id = "76561198012762732"
 
 def get_friend_ids(steam_id):
