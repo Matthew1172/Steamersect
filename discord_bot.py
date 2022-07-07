@@ -16,8 +16,6 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello World!')
     if message.content.startswith('$steamersect'):
         # get list from comma delimited steam ids
         id_string = message.content.split("$steamersect ", 1)[1]
@@ -27,9 +25,7 @@ async def on_message(message):
         intersect = interface_intersect(ids)
         majority = interface_majority(ids)
 
-        await message.channel.send("players")
-        for name in names:
-            await message.channel.send(name)
+        await message.channel.send("players: {}".format(convert_ids_to_string(names)))
 
         await message.channel.send("intersection")
         for game in intersect:
@@ -38,5 +34,11 @@ async def on_message(message):
         await message.channel.send("majority")
         for game in majority:
           await message.channel.send(game)
+
+def convert_ids_to_string(list_of_steam_ids):
+    s = ""
+    for name in list_of_steam_ids:
+        s += str(name)+", "
+    return s[:len(s)-2]
 
 client.run(bot_key)
