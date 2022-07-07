@@ -27,8 +27,13 @@ async def on_message(message):
 
         intersect = interface_intersect(ids)
         majority = interface_majority(ids)
-        await message.channel.send("intersection: {}".format(intersect))
-        await message.channel.send("majority: {}".format(majority))
-
+      
+        await message.channel.send("intersection")
+        for game in intersect:
+          await message.channel.send(game)
+          
+        await message.channel.send("majority")
+        for game in majority:
+          await message.channel.send(game)
 
 client.run(bot_key)
