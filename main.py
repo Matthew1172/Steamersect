@@ -1,8 +1,14 @@
 import math
 import requests
 
-my_key = "check env variables"
+my_key = "check env file"
 my_id = "76561198012762732"
+
+def get_player_details(steam_id):
+    summary_r = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={}&steamids={}".format(
+        my_key, steam_id)
+    result = requests.get(summary_r)
+    return result.json()
 
 def get_friend_ids(steam_id):
     friend_r = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={}&steamid={}&relationship=friend".format(
@@ -70,17 +76,19 @@ def get_game_details(list_of_games):
     :param list_of_games: input is a list of steam game ids
     :return: list of steam game objects. Could have an error type json object as an element, so when traversing the output of this function be mindful.
     '''
-    return [requests.get("https://store.steampowered.com/api/appdetails?appids={}".format(app)).json() for app in list_of_games]
+    if len(list_of_games) > 200: j = 200
+    else: j = len(list_of_games)
+    return [requests.get("https://store.steampowered.com/api/appdetails?appids={}".format(app)).json() for app in list_of_games[:j]]
 
 def get_game_names(list_of_game_details):
     '''
     :param list_of_game_details: list of steam game objects
     :return: list of game names
     '''
-    return [v['data']['name'] for game in list_of_game_details for k, v in game.items() if v['success']]
+    return [v['data']['name'] for game in list_of_game_details if game is not None for k, v in game.items() if v['success']]
 
-if __name__ == '__main__':
-    #ids = enter_steam_ids()
+def main():
+    # ids = enter_steam_ids()
     friend_ids = get_friend_ids(my_id)
     ids = friend_ids
     ids.append(my_id)
@@ -88,14 +96,35 @@ if __name__ == '__main__':
     games = get_games_from_ids(ids)
     print(games)
 
-    #find the intersection
+    # find the intersection
     intersect = lambda n, v: True if v == n else False
     intersection = filter(games, intersect)
-    #print(intersection)
+    print(intersection)
 
-    #find the majority
-    maj = lambda n, v: True if v >= math.ceil(n/2) else False
+    # find the majority
+    maj = lambda n, v: True if v >= math.ceil(n / 2) else False
     majority = filter(games, maj)
-    #print(majority)
-    #print the majority
+    print(majority)
+    # print the majority
     print(get_game_names(get_game_details(majority)))
+
+
+def interface_intersect(list_of_steam_ids):
+    games = get_games_from_ids(list_of_steam_ids)
+    intersect = lambda n, v: True if v == n else False
+    intersection = filter(games, intersect)
+    return get_game_names(get_game_details(intersection))
+
+
+def interface_majority(list_of_steam_ids):
+    games = get_games_from_ids(list_of_steam_ids)
+    maj = lambda n, v: True if v >= math.ceil(n / 2) else False
+    majority = filter(games, maj)
+    return get_game_names(get_game_details(majority))
+
+
+if __name__ == '__main__':
+    print(interface_majority([76561198012762732, 76561198024725398]))
+    print(interface_intersect([76561198012762732, 76561198024725398]))
+
+    pass
