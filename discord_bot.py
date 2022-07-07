@@ -1,6 +1,7 @@
 import discord
 import os
 from main import *
+from keep_alive import keep_alive
 
 bot_key = os.environ['DISCORD_BOT_TOKEN']
 
@@ -36,4 +37,5 @@ async def on_message(message):
         for game in majority:
           await message.channel.send(game)
 
+keep_alive()
 client.run(bot_key)
