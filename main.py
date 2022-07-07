@@ -6,13 +6,13 @@ my_key = os.environ['STEAM_TOKEN']
 
 my_id = "76561198012762732"
 
-
-def get_player_details(steam_id):
-    summary_r = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={}&steamids={}".format(
-        my_key, steam_id)
-    result = requests.get(summary_r)
-    return result.json()
-
+def get_player_details(list_of_steam_ids):
+    s = ""
+    for id in list_of_steam_ids:
+        s += str(id)+","
+    r = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={}&steamids={}".format(
+        my_key, s[:len(s)-1])
+    return requests.get(r).json()
 
 def get_friend_ids(steam_id):
     friend_r = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={}&steamid={}&relationship=friend".format(
@@ -148,6 +148,9 @@ def interface_majority(list_of_steam_ids):
     maj = lambda n, v: True if v >= math.ceil(n / 2) else False
     majority = filter(games, maj)
     return get_game_names(get_game_details(majority))
+
+def interface_player_names(list_of_steam_ids):
+    return [player['players']]
 
 
 if __name__ == '__main__':
