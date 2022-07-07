@@ -152,8 +152,7 @@ def interface_majority(list_of_steam_ids):
     return get_game_names(get_game_details(majority))
 
 def interface_player_names(list_of_steam_ids):
-    return [player['players']]
-
+    return [player['personaname'] for player in get_player_details(list_of_steam_ids)['response']['players']]
 
 if __name__ == '__main__':
     pass

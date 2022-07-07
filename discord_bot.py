@@ -23,11 +23,14 @@ async def on_message(message):
         id_string = message.content.split("$steamersect ", 1)[1]
         ids = id_string.split(',')
 
-        print(ids)
-
+        names = interface_player_names(ids)
         intersect = interface_intersect(ids)
         majority = interface_majority(ids)
-      
+
+        await message.channel.send("players")
+        for name in names:
+            await message.channel.send(name)
+
         await message.channel.send("intersection")
         for game in intersect:
           await message.channel.send(game)
