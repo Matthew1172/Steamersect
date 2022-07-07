@@ -154,5 +154,11 @@ def interface_majority(list_of_steam_ids):
 def interface_player_names(list_of_steam_ids):
     return [player['personaname'] for player in get_player_details(list_of_steam_ids)['response']['players']]
 
+def convert_ids_to_string(list_of_steam_ids):
+    s = ""
+    for name in list_of_steam_ids:
+        s += str(name)+", "
+    return s[:len(s)-2]
+
 if __name__ == '__main__':
     pass

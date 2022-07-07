@@ -19,6 +19,7 @@ async def on_message(message):
     if message.content.startswith('$steamersect'):
         # get list from comma delimited steam ids
         id_string = message.content.split("$steamersect ", 1)[1]
+        id_string = id_string.replace(" ", "")
         ids = id_string.split(',')
 
         names = interface_player_names(ids)
@@ -34,11 +35,5 @@ async def on_message(message):
         await message.channel.send("majority")
         for game in majority:
           await message.channel.send(game)
-
-def convert_ids_to_string(list_of_steam_ids):
-    s = ""
-    for name in list_of_steam_ids:
-        s += str(name)+", "
-    return s[:len(s)-2]
 
 client.run(bot_key)
