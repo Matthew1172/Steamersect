@@ -7,6 +7,8 @@ my_key = os.environ['STEAM_TOKEN']
 my_id = "76561198012762732"
 
 def get_player_details(list_of_steam_ids):
+    if len(list_of_steam_ids) > 100:
+        return -1
     s = ""
     for id in list_of_steam_ids:
         s += str(id)+","
