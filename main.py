@@ -1,7 +1,9 @@
 import math
 import requests
+import os
 
-my_key = "check env file"
+my_key = os.environ['STEAM_TOKEN']
+
 my_id = "76561198012762732"
 
 def get_player_details(steam_id):
